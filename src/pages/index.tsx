@@ -5,6 +5,7 @@ import Autoplay from "embla-carousel-autoplay"
 import Image, { StaticImageData } from "next/image"
 import { Button } from "@mantine/core"
 import { IconArrowUpRight as UpRightArrow } from "@tabler/icons-react"
+import ProductCard from "@/components/productCard"
 import makimaBanner from "../assets/banners/makima.png"
 import zoroBanner from "../assets/banners/zoro.png"
 import powerBanner from "../assets/banners/power.png"
@@ -16,7 +17,7 @@ import bookmarks from "../assets/collection/bookmarks.png"
 
 function CarouselSlide({ src, alt }: { src: StaticImageData, alt: string }) {
   return <Carousel.Slide className="bg-black">
-    <Image alt={alt} src={src} layout="fill" />
+    <Image alt={alt} src={src} fill />
   </Carousel.Slide>
 }
 
@@ -59,6 +60,47 @@ export default function Home() {
           <CollectionItem alt="bookmarks" src={bookmarks} />
         </div>
       </div>
-    </Layout >
+      <div className="flex flex-col gap-16">
+        <div>
+          <div className="pl-20 text-3xl mb-5">Latest Stickers</div>
+          <div className="flex justify-evenly">
+            <ProductCard src={stickers} alt="sticker" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="sticker" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="sticker" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="sticker" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+          </div>
+        </div>
+        <div>
+          <div className="pl-20 text-3xl mb-5">Latest Coasters</div>
+          <div className="flex justify-evenly">
+            <ProductCard src={stickers} alt="coaster" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="coaster" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="coaster" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="coaster" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+          </div>
+        </div>
+        <div>
+          <div className="pl-20 text-3xl mb-5">Latest Posters</div>
+          <div className="flex justify-evenly">
+            <ProductCard src={stickers} alt="poster" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="poster" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="poster" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="poster" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+          </div>
+        </div>
+        <div>
+          <div className="pl-20 text-3xl mb-5">Latest Bookmarks</div>
+          <div className="flex justify-evenly">
+            <ProductCard src={stickers} alt="bookmark" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="bookmark" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="bookmark" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+            <ProductCard src={stickers} alt="bookmark" title="Gojo Satoru Jujustu Kaisen sticker" price={5} />
+          </div>
+        </div>
+        <Button variant="filled" rightIcon={<UpRightArrow />} size="lg"
+          className="text-black bg-white hover:text-white block transition-colors duration-200"
+        > <div>BROWSE ALL</div></Button>
+      </div>
+    </Layout>
   )
 }

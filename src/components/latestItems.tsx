@@ -22,6 +22,7 @@ export default function Latest({ itype, limit }: { itype: string, limit: number 
                     alt={item.name}
                     title={item.name}
                     price={item.price}
+                    id={item.id}
                 />
             })
         }

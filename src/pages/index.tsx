@@ -24,18 +24,6 @@ function CarouselSlide({ src, alt }: { src: StaticImageData; alt: string }) {
 }
 
 export default function Home() {
-  const [latestStickers, setLatestStickers] = useState<ItemResponse>({})
-  const [latestCoasters, setLatestCoasters] = useState<ItemResponse>({})
-  const [latestPosters, setLatestPosters] = useState<ItemResponse>({})
-  const [latestBookmarks, setLatestBookmarks] = useState<ItemResponse>({})
-
-  useEffect(() => {
-    fetch("/api/latest?itype=sticker&limit=4").then(res => (res.json())).then(setLatestStickers)
-    fetch("/api/latest?itype=coaster&limit=4").then(res => (res.json())).then(setLatestCoasters)
-    fetch("/api/latest?itype=poster&limit=4").then(res => (res.json())).then(setLatestPosters)
-    fetch("/api/latest?itype=bookmark&limit=4").then(res => (res.json())).then(setLatestBookmarks)
-  }, [])
-
   return (
     <Layout>
       <Carousel autoPlay dynamicHeight emulateTouch infiniteLoop renderIndicator={undefined} showArrows={false} showStatus={false} showThumbs={false} showIndicators={false} swipeable>

@@ -1,6 +1,8 @@
 import Head from "next/head"
 import Navbar from "./navbar"
 import Footer from "./footer"
+import { Toaster } from "react-hot-toast"
+
 export default function Layout({ children, title = "Weeblet Store" }: { children: any, title?: string }) {
     return (
         <main className="bg-[#131313]">
@@ -8,7 +10,8 @@ export default function Layout({ children, title = "Weeblet Store" }: { children
                 <title>{title}</title>
             </Head>
             <Navbar />
-            <div className="min-h-[85vh] p-3 px-5">{children}</div>
+            <Toaster position="top-right" />
+            <div className="min-h-[85vh] mt-24">{children}</div>
             <Footer />
         </main>
     )

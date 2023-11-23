@@ -80,7 +80,7 @@ export default function Navbar() {
                 {menuVisible ? <X size={30} /> : <MenuIcon size={30} />}
             </button>
             {menuVisibleProxy && <>
-                <div className={`absolute left-0 top-24 bottom-0 w-screen h-full z-30 bg-black bg-opacity-80 flex flex-col items-center justify-center gap-10 ${menuVisible ? "slide-in-bottom" : "slide-out-bottom"}`}>
+                <div className={`absolute left-0 top-24 bottom-0 w-screen h-full z-30 bg-black backdrop-blur bg-opacity-80 flex flex-col items-center justify-center gap-10 ${menuVisible ? "slide-in-bottom" : "slide-out-bottom"}`}>
                     <div className="w-[90%] h-[80%] flex flex-col justify-start items-end gap-5">
                         <Link href="/shop"><Button>Shop</Button></Link>
                         <Link href="/about"><Button>About</Button></Link>

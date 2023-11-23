@@ -28,6 +28,7 @@
     "embla-carousel-autoplay": "^7.1.0",
     "embla-carousel-react": "^7.1.0",
     "eslint-config-next": "13.4.19",
+    "firebase": "^10.6.0",
     "next": "13.4.19",
     "postcss": "8.4.29",
     "react": "18.2.0",

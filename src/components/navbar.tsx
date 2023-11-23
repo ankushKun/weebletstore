@@ -29,20 +29,20 @@ export default function Navbar() {
             <div className="flex gap-4">
                 <Menu trigger="hover" openDelay={100} closeDelay={100}>
                     <Menu.Target>
-                        <Button rightIcon={<DownArrowIcon />}>Shop</Button>
+                        <Link href="/shop"><Button rightIcon={<DownArrowIcon />}>Shop</Button></Link>
                     </Menu.Target>
                     <Menu.Dropdown>
                         <Menu.Item>
-                            Stickers
+                            <Link href="/shop/stickers">Stickers</Link>
                         </Menu.Item>
                         <Menu.Item>
-                            Posters
+                            <Link href="/shop/posters">Posters</Link>
                         </Menu.Item>
                         <Menu.Item>
-                            Bookmarks
+                            <Link href="/shop/bookmarks">Bookmarks</Link>
                         </Menu.Item>
                         <Menu.Item>
-                            Coasters
+                            <Link href="/shop/coasters">Coasters</Link>
                         </Menu.Item>
                     </Menu.Dropdown>
                 </Menu>
@@ -53,7 +53,7 @@ export default function Navbar() {
                     icon={<IconSearch />} value={searchInput} onChange={setSearchInput} />
             </div>
             <div className="flex gap-5 items-center">
-                <div><Button>Cart(0)</Button></div>
+                <Link href="/cart"><Button>Cart(0)</Button></Link>
                 {/* <Menu trigger="hover" openDelay={100} closeDelay={100} >
                     <Menu.Target>
                         <Image alt="Profile" src="/media/profile.webp" className="rounded-full cursor-pointer" width={50} height={50} />
@@ -82,10 +82,10 @@ export default function Navbar() {
             {menuVisibleProxy && <>
                 <div className={`absolute left-0 top-24 bottom-0 w-screen h-full z-30 bg-black bg-opacity-80 flex flex-col items-center justify-center gap-10 ${menuVisible ? "slide-in-bottom" : "slide-out-bottom"}`}>
                     <div className="w-[90%] h-[80%] flex flex-col justify-start items-end gap-5">
-                        <Button>Shop</Button>
-                        <Button>About</Button>
-                        <Button>Contact Us</Button>
-                        <Button>Cart(0)</Button>
+                        <Link href="/shop"><Button>Shop</Button></Link>
+                        <Link href="/about"><Button>About</Button></Link>
+                        <Link href="/contact"><Button>Contact Us</Button></Link>
+                        <Link href="/cart"><Button>Cart(0)</Button></Link>
                     </div>
                 </div>
             </>}

@@ -1,10 +1,12 @@
 import Layout from "@/components/layout";
 import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 import { Button } from "@mantine/core";
 import { IconArrowUpRight as UpRightArrow } from "@tabler/icons-react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import ProductCard from "@/components/productCard";
+import CollectionItem from "@/components/collectionItem";
 import makimaBanner from "@/assets/banners/makima.png";
 import zoroBanner from "@/assets/banners/zoro.png";
 import powerBanner from "@/assets/banners/power.png";
@@ -22,19 +24,11 @@ function CarouselSlide({ src, alt }: { src: StaticImageData; alt: string }) {
   );
 }
 
-function CollectionItem({ src, alt }: { src: StaticImageData; alt: string }) {
-  return (
-    <div className="relative flex cursor-pointer items-center justify-center transition-transform duration-150 hover:scale-105">
-      <Image src={src} alt={alt} />
-    </div>
-  );
-}
-
 export default function Home() {
 
   return (
     <Layout>
-      <Carousel autoPlay emulateTouch infiniteLoop renderIndicator={undefined} showArrows={false} showStatus={false} showThumbs={false} showIndicators={false} swipeable>
+      <Carousel autoPlay dynamicHeight emulateTouch infiniteLoop renderIndicator={undefined} showArrows={false} showStatus={false} showThumbs={false} showIndicators={false} swipeable>
         <CarouselSlide src={makimaBanner} alt="makima" />
         <CarouselSlide src={zoroBanner} alt="zoro" />
         <CarouselSlide src={powerBanner} alt="power" />
@@ -42,15 +36,17 @@ export default function Home() {
       <div className="relative mx-auto mb-5 flex h-[300px] w-[98%] overflow-clip rounded-b-[40px]">
         <div className="z-20 flex w-[50%] flex-col items-center justify-center gap-5 p-5 text-black">
           <div className="text-4xl font-bold">NEWEST ARRIVALS</div>
-          <Button
-            variant="filled"
-            rightIcon={<UpRightArrow />}
-            size="lg"
-            className="block bg-white text-black transition-colors duration-200 hover:text-white"
-          >
-            {" "}
-            <div>SHOP NOW</div>
-          </Button>
+          <Link href="/shop">
+            <Button
+              variant="filled"
+              rightIcon={<UpRightArrow />}
+              size="lg"
+              className="block bg-white text-black transition-colors duration-200 hover:text-white"
+            >
+              {" "}
+              <div>SHOP NOW</div>
+            </Button>
+          </Link>
         </div>
         <Image
           alt="banner"
@@ -62,10 +58,10 @@ export default function Home() {
       <div className="py-10">
         <div className="text-center text-3xl">COLLECTIONS</div>
         <div className="my-10 grid grid-cols-2 p-5 items-center justify-center gap-7 lg:grid-cols-4">
-          <CollectionItem alt="stickers" src={stickers} />
-          <CollectionItem alt="coasters" src={coasters} />
-          <CollectionItem alt="posters" src={posters} />
-          <CollectionItem alt="bookmarks" src={bookmarks} />
+          <CollectionItem url="/shop/stickers" alt="stickers" src={stickers} />
+          <CollectionItem url="/shop/coasters" alt="coasters" src={coasters} />
+          <CollectionItem url="/shop/posters" alt="posters" src={posters} />
+          <CollectionItem url="/shop/bookmarks" alt="bookmarks" src={bookmarks} />
         </div>
       </div>
       <div className="flex flex-col gap-16">
@@ -185,15 +181,18 @@ export default function Home() {
             />
           </div>
         </div>
-        <Button
-          variant="filled"
-          rightIcon={<UpRightArrow />}
-          size="lg"
-          className="block bg-white text-black transition-colors duration-200 hover:text-white"
-        >
-          {" "}
-          <div>BROWSE ALL</div>
-        </Button>
+        <Link href="/shop" className="w-full">
+          <Button
+            variant="filled"
+            rightIcon={<UpRightArrow />}
+            size="lg"
+            radius={0}
+            className="w-full block bg-white text-black transition-colors duration-200 hover:text-white"
+          >
+            {" "}
+            <div>BROWSE ALL</div>
+          </Button>
+        </Link>
       </div>
     </Layout>
   );

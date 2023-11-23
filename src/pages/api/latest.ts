@@ -1,11 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { initializeApp } from 'firebase/app'
-import { firebaseConfig } from "@/firebase.config"
+import app from '@/firebase.config'
 import { getDatabase, get, ref, orderByKey, orderByValue, query, orderByChild, limitToLast, onValue, equalTo } from 'firebase/database'
 import { ItemResponse, ErrorResponse } from '@/types'
 
-const app = initializeApp(firebaseConfig)
 const db = getDatabase(app)
 
 export default function handler(

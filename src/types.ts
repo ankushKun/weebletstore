@@ -5,7 +5,8 @@ export type item = {
     itype: "sticker" | "coaster" | "poster" | "bokmark",
     price: number,
     images: string[],
-    postDescription: string
+    postDescription: string,
+    quantity?: number
 }
 
 export type ItemResponse = {

@@ -6,6 +6,12 @@
   padding: 0px;
   margin: 0px;
   scroll-behavior: smooth !important;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }
 
 .slide-in-bottom {

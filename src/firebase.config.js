@@ -1,3 +1,5 @@
+import { initializeApp } from "firebase/app"
+
 export const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -7,3 +9,7 @@ export const firebaseConfig = {
     messagingSenderId: process.env.MESSAGE_SENDER_ID,
     appId: process.env.FIREBASE_APP_ID
 }
+
+const app = initializeApp(firebaseConfig)
+
+export default app

@@ -16,3 +16,9 @@ export type ItemResponse = {
 export type ErrorResponse = {
     error: string
 }
+
+export type PromoDetails = {
+    discount?: number
+    delivery?: number
+    easteregg?: string
+}

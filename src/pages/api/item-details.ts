@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { ItemResponse } from '@/types'
+import { ItemResponse, PromoDetails } from '@/types'
 import type { NextApiRequest, NextApiResponse } from 'next'
 // import { request } from 'https'
 import app from '@/firebase.config'
@@ -10,74 +10,53 @@ const db = getDatabase(app)
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<{ items: ItemResponse, total: number }>
+    res: NextApiResponse<{ items: ItemResponse, productTotal: number, discount: number, delivery: number, orderTotal: number, valid: boolean }>
 ) {
     const data = req.body
-
-
-    const keys = Object.keys(data)
+    const items = data.items
+    const promo = data.promo
+    const keys = Object.keys(items)
 
     const itemDetails: ItemResponse = {}
-    let total = 0
+    let productTotal = 0
+    let discount = 0
+    let delivery = 75
+    let orderTotal = 0
 
     for (const key of keys) {
         const itemRef = ref(db, `items/${key}`)
         const snapshot = await get(itemRef)
         if (snapshot.exists()) {
             itemDetails[key] = snapshot.val()
-            itemDetails[key].quantity = data[key]
-            total += snapshot.val().price * data[key]
+            itemDetails[key].quantity = items[key]
+            productTotal += snapshot.val().price * items[key]
         }
     }
 
-    // var paytmParams: any = {};
+    var valid = false
+    if (promo) {
+        const p = await get(ref(db, `promos/${promo}`))
+        const promoDetails: PromoDetails = p.val()
+        if (promoDetails) {
+            if (promoDetails.discount) {
+                discount = promoDetails.discount
+                productTotal += discount
+            }
+            if (promoDetails.delivery) {
+                delivery += promoDetails.delivery
+            }
+            if (promoDetails.easteregg) {
+                itemDetails[promoDetails.easteregg].quantity = 1
+            }
+            valid = true
+        }
+    }
 
-    // paytmParams.body = {
-    //     "mid": process.env.MID,
-    //     "orderId": `${new Date().getTime()}`,
-    //     "amount": `${parseFloat(total.toString()).toFixed(2)}`,
-    //     "businessType": "UPI_QR_CODE",
-    //     "posId": "WBSTORE"
-    // }
+    if (productTotal > 500) {
+        delivery = -75
+    }
 
-    // PaytmChecksum.generateSignature(JSON.stringify(paytmParams.body), process.env.MERCHANT_KEY).then(function (checksum: any) {
-    //     paytmParams.head = {
-    //         "clientId": "C00",
-    //         "version": "v1",
-    //         "signature": checksum
-    //     }
-    //     var post_data = JSON.stringify(paytmParams);
+    orderTotal = productTotal + delivery
 
-    //     var options = {
-
-    //         /* for Staging */
-    //         hostname: 'securegw-stage.paytm.in',
-
-    //         /* for Production */
-    //         // hostname: 'securegw.paytm.in',
-
-    //         port: 443,
-    //         path: '/paymentservices/qr/create',
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Content-Length': post_data.length
-    //         }
-    //     };
-
-    //     var response = "";
-    //     var post_req = request(options, function (post_res) {
-    //         post_res.on('data', function (chunk) {
-    //             response += chunk;
-    //         });
-
-    //         post_res.on('end', function () {
-    //             console.log('Response: ', response);
-    //         });
-    //     });
-    //     post_req.write(post_data);
-    //     post_req.end();
-    // })
-
-    res.status(200).json({ items: itemDetails, total })
+    res.status(200).json({ items: itemDetails, productTotal, delivery, discount, orderTotal, valid })
 }

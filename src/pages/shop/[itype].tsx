@@ -5,7 +5,6 @@ import Latest from "@/components/latestItems";
 
 export default function Stickers() {
     const router = useRouter()
-    console.log(router.query)
     const itype = (router.query.itype as string)
     const itypeFixed = itype?.slice(0, -1)
     const [count, setCount] = useState(12)

@@ -8,11 +8,13 @@ import { Button } from "@mantine/core";
 
 export default function Cart() {
     const [cartItems, setCartItems] = useState<ItemResponse>({})
-    const [total, setTotal] = useState(0)
+    const [productTotal, setProductTotal] = useState(0)
     const [delivery, setDelivery] = useState(75)
     const [discount, setDiscount] = useState(0)
-    const [deliveryFree, setDeliveryFree] = useState(false)
+    const [orderTotal, setOrderTotal] = useState(0)
+    const [query, setQuery] = useState("")
     const [coupon, setCoupon] = useState("")
+    const [valid, setValid] = useState(false)
 
     const CartItem = ({ title, img, price, quantity, id }: {
         title: string
@@ -76,6 +78,11 @@ export default function Cart() {
     }
 
     useEffect(() => {
+        const timeOutId = setTimeout(() => setCoupon(query), 500);
+        return () => clearTimeout(timeOutId);
+    }, [query]);
+
+    useEffect(() => {
         function fetchDetails() {
             if (!window) return
             const cart = window.localStorage.getItem("cart")
@@ -84,35 +91,39 @@ export default function Cart() {
 
             fetch("/api/item-details", {
                 method: "POST",
-                body: JSON.stringify(cartObject),
+                body: JSON.stringify({ items: cartObject, promo: coupon }),
                 headers: { "Content-Type": "application/json" }
             }).then(res => res.json()).then(res => {
                 setCartItems(res.items)
-                setTotal(res.total)
+                setProductTotal(res.productTotal)
+                setDelivery(res.delivery)
+                setDiscount(res.discount)
+                setOrderTotal(res.orderTotal)
+                setValid(res.valid)
             })
         }
 
         fetchDetails()
         window.addEventListener("storage", fetchDetails)
-    }, [])
+    }, [coupon])
 
     const Slip = () => {
         return <div className="col-span-3 md:col-span-1 lg:mx-10">
             <div className="flex justify-center ring-1 ring-white h-fit py-5 rounded-2xl">
                 <div className="w-[80%] flex flex-col gap-5 h-fit">
                     <div className="text-2xl uppercase text-center mb-5">your order</div>
-                    <input type="text" placeholder="Discount Code" className="p-1 bg-transparent border-b " />
+                    <input type="text" placeholder="Discount Code" className={`p-1 bg-transparent outline-none border-b ${(valid) ? "text-green-500" : "text-red-500"}`} autoFocus value={query} onChange={(e) => setQuery(e.target.value)} />
                     <div className="grid grid-cols-2 gap-y-2 border-b pb-4">
                         <div className="flex justify-start">Price</div>
-                        <div className="flex justify-end">₹ {total}</div>
-                        <div className={`flex justify-start ${deliveryFree && "text-red-500 line-through"}`}>Delivery</div>
-                        <div className={`flex justify-end ${deliveryFree && "text-red-500 line-through"}`}>₹ {delivery}</div>
-                        <div className={`flex justify-start ${discount > 0 ? "text-green-500" : " text-white/30"}`}>Discount</div>
-                        <div className={`flex justify-end ${discount > 0 ? " text-green-500" : " text-white/30"}`}>₹ {discount}</div>
+                        <div className="flex justify-end">₹ {productTotal}</div>
+                        <div className={`flex justify-start ${delivery <= 0 && "text-green-500"}`}>Delivery</div>
+                        <div className={`flex justify-end ${delivery <= 0 && "text-green-500"}`}>₹ {delivery}</div>
+                        <div className={`flex justify-start ${discount < 0 ? "text-green-500" : " text-white/30"}`}>Discount</div>
+                        <div className={`flex justify-end ${discount < 0 ? " text-green-500" : " text-white/30"}`}>₹ {discount}</div>
                     </div>
                     <div className="grid grid-cols-2 gap-y-2 text-xl font-semibold">
                         <div className="flex justify-start">Total</div>
-                        <div className="flex justify-end">₹ {total + delivery - discount}</div>
+                        <div className="flex justify-end">₹ {orderTotal}</div>
                     </div>
                 </div>
             </div>

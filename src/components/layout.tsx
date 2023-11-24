@@ -10,7 +10,7 @@ export default function Layout({ children, title = "Weeblet Store" }: { children
                 <title>{title}</title>
             </Head>
             <Navbar />
-            <Toaster position="top-right" />
+            <Toaster position="top-left" />
             <div className="min-h-[85vh] mt-24">{children}</div>
             <Footer />
         </main>

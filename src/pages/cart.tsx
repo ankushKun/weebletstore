@@ -4,7 +4,7 @@ import { ItemResponse } from "@/types";
 import { useEffect, useState } from "react";
 import { IconTrash } from "@tabler/icons-react";
 import toast from "react-hot-toast";
-import { Button, Input } from "@mantine/core";
+import { Button, Input, CloseButton } from "@mantine/core";
 
 export default function Cart() {
     const [cartItems, setCartItems] = useState<ItemResponse>({})
@@ -114,7 +114,22 @@ export default function Cart() {
                 <div className="w-[80%] flex flex-col gap-5 h-fit">
                     <div className="text-2xl uppercase text-center mb-5">your order</div>
                     {/* <input type="text" placeholder="Promo Code" className={`p-1 bg-transparent outline-none border-b ${(valid) ? "text-green-500" : "text-red-500"}`} autoFocus value={query} onChange={(e) => setQuery(e.target.value)} /> */}
-                    <Input placeholder="Promo Code" variant="unstyled" className={`p-1 bg-transparent outline-none border-b ${(valid) ? "text-green-500" : "text-red-500"}`} autoFocus value={query} onChange={(e) => setQuery(e.target.value)} />
+                    <Input placeholder="Promo Code" variant="unstyled" error={!valid && coupon}
+                        className={`p-1 bg-transparent outline-none border-b ${(valid) ? "text-green-500" : "text-red-500"}`} autoFocus
+                        value={query} onChange={(e) => setQuery(e.target.value)}
+                        styles={{
+                            input: {
+                                color: valid ? "rgb(34 197 94)" : "white"
+                            }
+                        }}
+                        rightSection={
+                            <CloseButton
+                                aria-label="Clear input"
+                                onClick={() => { setCoupon(""); setQuery("") }}
+                                style={{ display: coupon ? undefined : 'none' }}
+                            />
+                        }
+                    />
                     <div className="grid grid-cols-2 gap-y-2 border-b pb-4">
                         <div className="flex justify-start">Price</div>
                         <div className="flex justify-end">₹ {productTotal}</div>

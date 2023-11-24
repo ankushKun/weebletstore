@@ -58,6 +58,10 @@ export default async function handler(
 
 
     orderTotal = productTotal + delivery + discount
+    if (orderTotal < 0)
+        orderTotal = 0
+    if (productTotal < 0)
+        productTotal = 0
 
     res.status(200).json({ items: itemDetails, productTotal, delivery, discount, orderTotal, valid })
 }

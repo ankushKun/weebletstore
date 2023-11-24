@@ -40,23 +40,24 @@ export default async function handler(
         if (promoDetails) {
             if (promoDetails.discount) {
                 discount = promoDetails.discount
-                productTotal += discount
             }
             if (promoDetails.delivery) {
                 delivery += promoDetails.delivery
             }
-            if (promoDetails.easteregg) {
-                itemDetails[promoDetails.easteregg].quantity = 1
-            }
+            // if (promoDetails.easteregg) {
+            //     itemDetails[promoDetails.easteregg] = await get(ref(db, `items/${promoDetails.easteregg}`)).then(snapshot => snapshot.val())
+            //     itemDetails[promoDetails.easteregg].quantity = 0
+
+            // }
             valid = true
         }
     }
 
-    if (productTotal > 500) {
-        delivery = -75
-    }
+    if (productTotal > 500)
+        delivery = 0
 
-    orderTotal = productTotal + delivery
+
+    orderTotal = productTotal + delivery + discount
 
     res.status(200).json({ items: itemDetails, productTotal, delivery, discount, orderTotal, valid })
 }

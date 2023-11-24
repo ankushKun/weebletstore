@@ -4,12 +4,12 @@ import { ItemResponse } from "@/types";
 import { useEffect, useState } from "react";
 import { IconTrash } from "@tabler/icons-react";
 import toast from "react-hot-toast";
-import { Button } from "@mantine/core";
+import { Button, Input } from "@mantine/core";
 
 export default function Cart() {
     const [cartItems, setCartItems] = useState<ItemResponse>({})
     const [productTotal, setProductTotal] = useState(0)
-    const [delivery, setDelivery] = useState(75)
+    const [delivery, setDelivery] = useState(0)
     const [discount, setDiscount] = useState(0)
     const [orderTotal, setOrderTotal] = useState(0)
     const [query, setQuery] = useState("")
@@ -38,6 +38,7 @@ export default function Cart() {
             if (!cart) return
             const cartObject = JSON.parse(cart)
             cartObject[id]--
+            if (cartObject[id] <= 0) delete cartObject[id]
             localStorage.setItem("cart", JSON.stringify(cartObject))
             dispatchEvent(new Event("storage"))
             toast.success("Item quantity decreased")
@@ -78,7 +79,7 @@ export default function Cart() {
     }
 
     useEffect(() => {
-        const timeOutId = setTimeout(() => setCoupon(query), 500);
+        const timeOutId = setTimeout(() => setCoupon(query), 250);
         return () => clearTimeout(timeOutId);
     }, [query]);
 
@@ -112,12 +113,13 @@ export default function Cart() {
             <div className="flex justify-center ring-1 ring-white h-fit py-5 rounded-2xl">
                 <div className="w-[80%] flex flex-col gap-5 h-fit">
                     <div className="text-2xl uppercase text-center mb-5">your order</div>
-                    <input type="text" placeholder="Discount Code" className={`p-1 bg-transparent outline-none border-b ${(valid) ? "text-green-500" : "text-red-500"}`} autoFocus value={query} onChange={(e) => setQuery(e.target.value)} />
+                    {/* <input type="text" placeholder="Promo Code" className={`p-1 bg-transparent outline-none border-b ${(valid) ? "text-green-500" : "text-red-500"}`} autoFocus value={query} onChange={(e) => setQuery(e.target.value)} /> */}
+                    <Input placeholder="Promo Code" variant="unstyled" className={`p-1 bg-transparent outline-none border-b ${(valid) ? "text-green-500" : "text-red-500"}`} autoFocus value={query} onChange={(e) => setQuery(e.target.value)} />
                     <div className="grid grid-cols-2 gap-y-2 border-b pb-4">
                         <div className="flex justify-start">Price</div>
                         <div className="flex justify-end">₹ {productTotal}</div>
-                        <div className={`flex justify-start ${delivery <= 0 && "text-green-500"}`}>Delivery</div>
-                        <div className={`flex justify-end ${delivery <= 0 && "text-green-500"}`}>₹ {delivery}</div>
+                        <div className={`flex justify-start ${delivery == 0 && "text-green-500"}`}>Delivery</div>
+                        <div className={`flex justify-end ${delivery == 0 && "text-green-500"}`}>₹ {delivery}</div>
                         <div className={`flex justify-start ${discount < 0 ? "text-green-500" : " text-white/30"}`}>Discount</div>
                         <div className={`flex justify-end ${discount < 0 ? " text-green-500" : " text-white/30"}`}>₹ {discount}</div>
                     </div>
@@ -135,26 +137,26 @@ export default function Cart() {
 
     return <Layout title="Cart | Weeblet Store">
         <div className="grid grid-cols-3 gap-5 mx-10">
-            <div className="grid grid-cols-3 mt-5 md:hidden col-span-3">
+            {Object.keys(cartItems).length > 0 ? <><div className="grid grid-cols-3 mt-5 md:hidden col-span-3">
                 <Slip />
             </div>
-            <div className="capitalize text-2xl text-white text-center py-5 col-span-3">Cart Items</div>
-            <div className="col-span-3 md:col-span-2">
-                <div className="grid grid-cols-5">
-                    <div className="col-span-4"></div>
-                    <div className="flex items-center justify-center"><div className="pr-6">subtotal</div></div>
+                <div className="capitalize text-2xl text-white text-center py-5 col-span-3">Cart Items</div>
+                <div className="col-span-3 md:col-span-2">
+                    <div className="grid grid-cols-5">
+                        <div className="col-span-4"></div>
+                        <div className="flex items-center justify-center"><div className="pr-6">subtotal</div></div>
+                    </div>
+                    <div className="flex flex-col gap-5 border-t pt-5">
+                        {
+                            Object.keys(cartItems).map((key) => {
+                                const item = cartItems[key]
+                                return <CartItem key={key} id={item.id} title={item.name} img={item.images[0]} price={item.price} quantity={item.quantity || 1} />
+                            })
+                        }
+                    </div>
                 </div>
-                <div className="flex flex-col gap-5 border-t pt-5">
-                    {
-                        Object.keys(cartItems).map((key) => {
-                            const item = cartItems[key]
-                            return <CartItem key={key} id={item.id} title={item.name} img={item.images[0]} price={item.price} quantity={item.quantity || 1} />
-                        })
-                    }
-                </div>
-            </div>
-            {/* SLIP */}
-            <Slip />
+                {/* SLIP */}
+                <Slip /></> : <>no items</>}
         </div>
     </Layout>
 }

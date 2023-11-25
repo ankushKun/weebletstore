@@ -117,11 +117,7 @@ export default function Cart() {
                     <Input placeholder="Promo Code" variant="unstyled" error={!valid && coupon}
                         className={`p-1 bg-transparent outline-none border-b ${(valid) ? "text-green-500" : "text-red-500"}`} autoFocus
                         value={query} onChange={(e) => setQuery(e.target.value)}
-                        styles={{
-                            input: {
-                                color: valid ? "rgb(34 197 94)" : "white"
-                            }
-                        }}
+                        styles={{ input: { color: valid ? "rgb(34 197 94)" : "white" } }}
                         rightSection={
                             <CloseButton
                                 aria-label="Clear input"

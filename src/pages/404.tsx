@@ -7,21 +7,32 @@ import { Button } from "@mantine/core";
 import { IconArrowUpRight as UpRightArrow } from "@tabler/icons-react";
 
 export default function E404() {
-    return <Layout title="404 | Weeblet Store">
-        <div className="flex flex-col items-center justify-center h-[86vh]">
-            <Image src="https://media.tenor.com/vPi50OlSEM4AAAAC/sorry-anime.gif" alt="cri" width={400} height={400} className="object-cover object-center rounded-xl" />
-            <div className="sm:text-xl relative -top-8 text-black backdrop-blur px-5 font-bold">I cant find what you are looking for</div>
-            <Link href="/shop">
-                <Button
-                    variant="filled"
-                    rightIcon={<UpRightArrow />}
-                    size="lg"
-                    className="block bg-white text-black transition-colors duration-200 hover:text-white my-10"
-                >
-                    {" "}
-                    <div>BROWSE OTHER PRODUCTS</div>
-                </Button>
-            </Link>
+  return (
+    <Layout title="404 | Weeblet Store">
+      <div className="flex h-[86vh] flex-col items-center justify-center">
+        <div className="px-5 font-bold text-white sm:text-xl">Error 404</div>
+        <Image
+          src="https://media.tenor.com/vPi50OlSEM4AAAAC/sorry-anime.gif"
+          alt="cri"
+          width={400}
+          height={400}
+          className="rounded-xl object-cover object-center"
+        />
+        <div className="px-5 font-bold text-white sm:text-xl">
+          I cant find what you are looking for
         </div>
+        <Link href="/shop">
+          <Button
+            variant="filled"
+            rightIcon={<UpRightArrow />}
+            size="lg"
+            className="my-10 block bg-white text-black transition-colors duration-200 hover:text-white"
+          >
+            {" "}
+            <div>BROWSE OTHER PRODUCTS</div>
+          </Button>
+        </Link>
+      </div>
     </Layout>
+  );
 }

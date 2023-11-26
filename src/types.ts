@@ -17,6 +17,7 @@ export type Item = {
   description?: string;
   postDescription: string;
   quantity?: number;
+  slug: string;
 };
 
 export type Description = {

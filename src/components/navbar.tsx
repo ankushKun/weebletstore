@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { TextInput, Menu, Button } from "@mantine/core";
+import { Menu, Button, Select } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { useViewportSize } from "@mantine/hooks";
 import {
@@ -10,19 +10,35 @@ import {
   IconShoppingCartFilled as Cart,
 } from "@tabler/icons-react";
 import logo from "@/assets/weebletstore-transparent.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import profilePlaceholder from "@/assets/profile.webp";
+import { Item } from "@/types";
+import { urlFor } from "@/utils/sanity/client";
 
 export default function Navbar() {
   const { height, width } = useViewportSize();
   const [menuVisible, setMenuVisible] = useInputState(false);
   const [menuVisibleProxy, setMenuVisibleProxy] = useInputState(false);
-  const [searchInput, setSearchInput] = useInputState("");
   const [cartCount, setCartCount] = useInputState(0);
+  const [searchQuery, setSearchQuery] = useInputState("")
+  const [searchQueryProxy, setSearchQueryProxy] = useInputState("")
+  const [searchResults, setSearchResults] = useState<Item[]>([])
 
   const session = useSession();
+
+  useEffect(() => {
+    if (!searchQuery) return
+    fetch(`/api/search?query=${searchQuery}`)
+      .then(res => res.json())
+      .then(res => setSearchResults(res))
+  }, [searchQuery])
+
+  useEffect(() => {
+    const t = setTimeout(() => setSearchQuery(searchQueryProxy), 250);
+    return () => clearTimeout(t);
+  }, [searchQueryProxy])
 
   useEffect(() => {
     if (!window) return;
@@ -72,13 +88,34 @@ export default function Navbar() {
             </Menu>
           </div>
           <div>
-            <TextInput
+            <Select
+              data={searchResults.map((item) => {
+                return { value: item._id, label: item.name }
+              })}
+              searchable
               placeholder="Search by name"
               variant="unstyled"
               className="border-b"
               icon={<IconSearch />}
-              value={searchInput}
-              onChange={setSearchInput}
+              onSearchChange={setSearchQueryProxy}
+              limit={10}
+              dropdownComponent={() => {
+                return <div className="overflow-scroll flex flex-col p-0.5 gap-1 w-full rounded">
+                  {searchResults.map((item) => {
+                    return <Link href={`/product/${item.slug}`}>
+                      <div className="flex gap-2 rounded items-center hover:bg-slate-900 w-full p-1">
+                        <Image src={urlFor(item.images[0])} width={50} height={50} alt={item.slug} className="rounded" />
+                        <div>
+                          <div>{item.name}</div>
+                          <div className="text-white/70 text-sm">{item.anime}</div>
+                          <div className="text-white/70 text-sm">{item.itype}</div>
+                        </div>
+                      </div>
+                    </Link>
+                  })}
+                </div>
+              }}
+
             />
           </div>
           <div className="flex items-center gap-5">
@@ -158,6 +195,34 @@ export default function Navbar() {
                     height={50}
                     onClick={() => {
                       if (session.status != "authenticated") signIn("google");
+                    }}
+                  />
+                  <Select
+                    data={searchResults.map((item) => {
+                      return { value: item._id, label: item.name }
+                    })}
+                    searchable
+                    placeholder="Search by name"
+                    variant="unstyled"
+                    className="border-b"
+                    icon={<IconSearch />}
+                    onSearchChange={setSearchQueryProxy}
+                    limit={10}
+                    dropdownComponent={() => {
+                      return <div className="overflow-scroll flex flex-col p-0.5 gap-1 w-full rounded">
+                        {searchResults.map((item) => {
+                          return <Link href={`/product/${item.slug}`}>
+                            <div className="flex gap-2 rounded items-center hover:bg-slate-900 w-full p-1">
+                              <Image src={urlFor(item.images[0])} width={50} height={50} alt={item.slug} className="rounded" />
+                              <div>
+                                <div>{item.name}</div>
+                                <div className="text-white/70 text-sm">{item.anime}</div>
+                                <div className="text-white/70 text-sm">{item.itype}</div>
+                              </div>
+                            </div>
+                          </Link>
+                        })}
+                      </div>
                     }}
                   />
                   <Link href="/shop">

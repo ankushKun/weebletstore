@@ -11,16 +11,11 @@ import { client } from "@/utils/sanity/client";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Item>,
+  res: NextApiResponse<Item[]>,
 ) {
-  const data = req.query;
-  const id = data.id;
+  const searchText = req.query.query as string;
 
-  const query = `*[_type == "items" && id == "${id}"]`;
+  const query = `*[_type == "items" && name match "${searchText}*" || anime match "${searchText}*"]`;
   const itemDetails: Item[] = await client.fetch(query);
-  const itype = itemDetails[0].itype;
-  const descQuery = `*[_type == "descriptions" && itype == "${itype}"]`;
-  const descDetails: Description[] = await client.fetch(descQuery);
-  itemDetails[0].description = descDetails[0].description;
-  res.status(200).json(itemDetails[0]);
+  res.status(200).json(itemDetails);
 }

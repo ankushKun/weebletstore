@@ -12,7 +12,7 @@ export async function getServerSideProps({ query }: { query: any }) {
   // const item = await fetch(base + `/api/item-details?id=${query.id}`).then(
   //   (res) => res.json(),
   // );
-
+  //
   // return { props: { item } };
   return { props: { item: {} } };
 }

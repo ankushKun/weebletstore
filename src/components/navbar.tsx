@@ -97,7 +97,7 @@ export default function Navbar() {
                   src={
                     session.status == "unauthenticated"
                       ? profilePlaceholder
-                      : session.data?.user?.image
+                      : session.data?.user?.image as string
                   }
                   className="cursor-pointer rounded-full"
                   width={50}
@@ -113,7 +113,7 @@ export default function Navbar() {
                     <Menu.Item>Profile</Menu.Item>
                     <Menu.Item>Orders</Menu.Item>
                     <Menu.Item>Settings</Menu.Item>
-                    <Menu.Item color="red" onClick={signOut}>
+                    <Menu.Item color="red" onClick={() => signOut()}>
                       Logout
                     </Menu.Item>
                   </>
@@ -142,9 +142,8 @@ export default function Navbar() {
           {menuVisibleProxy && (
             <>
               <div
-                className={`fixed bottom-0 left-0 top-24 z-30 flex h-full w-screen flex-col items-center justify-center gap-10 bg-black bg-opacity-80 backdrop-blur ${
-                  menuVisible ? "slide-in-bottom" : "slide-out-bottom"
-                }`}
+                className={`fixed bottom-0 left-0 top-24 z-30 flex h-full w-screen flex-col items-center justify-center gap-10 bg-black bg-opacity-80 backdrop-blur ${menuVisible ? "slide-in-bottom" : "slide-out-bottom"
+                  }`}
               >
                 <div className="flex h-[80%] w-[90%] flex-col items-end justify-start gap-5">
                   <Image
@@ -152,7 +151,7 @@ export default function Navbar() {
                     src={
                       session.status == "unauthenticated"
                         ? profilePlaceholder
-                        : session.data?.user?.image
+                        : session.data?.user?.image as string
                     }
                     className="mr-5 cursor-pointer rounded-full"
                     width={50}
@@ -174,7 +173,7 @@ export default function Navbar() {
                     <Button>Cart({cartCount})</Button>
                   </Link>
                   {session.status == "authenticated" && (
-                    <Button color="red" onClick={signOut}>
+                    <Button color="red" onClick={() => signOut()}>
                       Logout
                     </Button>
                   )}

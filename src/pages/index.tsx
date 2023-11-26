@@ -6,13 +6,11 @@ import { Button } from "@mantine/core";
 import { IconArrowUpRight as UpRightArrow } from "@tabler/icons-react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
-import ProductCard from "@/components/productCard";
 import makimaBanner from "@/assets/banners/makima.png";
 import zoroBanner from "@/assets/banners/zoro.png";
 import powerBanner from "@/assets/banners/power.png";
 import newArrivals from "@/assets/banners/new-arrivals.png";
 import Collections from "@/components/collections";
-import { item, ItemResponse } from "@/types";
 import Latest from "@/components/latestItems";
 
 function CarouselSlide({ src, alt }: { src: StaticImageData; alt: string }) {

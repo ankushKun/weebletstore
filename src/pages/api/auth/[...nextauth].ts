@@ -7,12 +7,12 @@ export const authOptions = {
     GoogleProvider({
       clientId:
         process.env.ENV == "DEV"
-          ? process.env.DEV_GOOGLE_CLIENT_ID
-          : process.env.GOOGLE_CLIENT_ID,
+          ? process.env.DEV_GOOGLE_CLIENT_ID as string
+          : process.env.GOOGLE_CLIENT_ID as string,
       clientSecret:
         process.env.ENV == "DEV"
-          ? process.env.DEV_GOOGLE_CLIENT_SECRET
-          : process.env.GOOGLE_CLIENT_SECRET,
+          ? process.env.DEV_GOOGLE_CLIENT_SECRET as string
+          : process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
 };

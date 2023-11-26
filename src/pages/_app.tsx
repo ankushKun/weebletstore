@@ -2,12 +2,13 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
 import { SessionProvider } from "next-auth/react";
+import { type ComponentType } from "react";
 import "../styles/globals.css";
 
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
-}) {
+}: { Component: any, pageProps: any }) {
   return (
     <SessionProvider session={session}>
       <Head>

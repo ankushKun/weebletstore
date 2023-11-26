@@ -1,19 +1,19 @@
 import Image from "next/image";
 import Layout from "@/components/layout";
-import { ItemResponse } from "@/types";
 import { useEffect, useState } from "react";
 import { IconTrash } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { Button, Input, CloseButton } from "@mantine/core";
+import { Item } from "@/types";
+import { urlFor } from "@/utils/sanity/client";
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState<ItemResponse>({});
+  const [cartItems, setCartItems] = useState<Item[]>([]);
   const [productTotal, setProductTotal] = useState(0);
   const [delivery, setDelivery] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [orderTotal, setOrderTotal] = useState(0);
-  const [query, setQuery] = useState("");
-  const [coupon, setCoupon] = useState("");
+  const [promoOuter, setPromoOuter] = useState("");
   const [valid, setValid] = useState(false);
 
   const CartItem = ({
@@ -94,11 +94,6 @@ export default function Cart() {
   }
 
   useEffect(() => {
-    const timeOutId = setTimeout(() => setCoupon(query), 250);
-    return () => clearTimeout(timeOutId);
-  }, [query]);
-
-  useEffect(() => {
     function fetchDetails() {
       if (!window) return;
       const cart = window.localStorage.getItem("cart");
@@ -107,7 +102,7 @@ export default function Cart() {
 
       fetch("/api/cart", {
         method: "POST",
-        body: JSON.stringify({ items: cartObject, promo: coupon }),
+        body: JSON.stringify({ items: cartObject, promo: promoOuter }),
         headers: { "Content-Type": "application/json" },
       })
         .then((res) => res.json())
@@ -118,14 +113,24 @@ export default function Cart() {
           setDiscount(res.discount);
           setOrderTotal(res.orderTotal);
           setValid(res.valid);
+          if (res.valid) {
+            toast.success(`${promoOuter} applied`);
+          }
         });
     }
 
     fetchDetails();
     window.addEventListener("storage", fetchDetails);
-  }, [coupon]);
+  }, [promoOuter]);
 
   const Slip = () => {
+    const [promoInner, setPromoInner] = useState(promoOuter)
+
+    useEffect(() => {
+      const timeOutId = setTimeout(() => setPromoOuter(promoInner), 400);
+      return () => clearTimeout(timeOutId);
+    }, [promoInner])
+
     return (
       <div className="col-span-3 md:col-span-1 lg:mx-10">
         <div className="flex h-fit justify-center rounded-2xl py-5 ring-1 ring-white">
@@ -137,22 +142,19 @@ export default function Cart() {
             <Input
               placeholder="Promo Code"
               variant="unstyled"
-              error={!valid && coupon}
-              className={`border-b bg-transparent p-1 outline-none ${
-                valid ? "text-green-500" : "text-red-500"
-              }`}
+              error={!valid && promoOuter}
+              className={`border-b bg-transparent p-1 outline-none ${valid ? "text-green-500" : "text-red-500"}`}
               autoFocus
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              value={promoInner}
+              onChange={(e) => setPromoInner(e.target.value)}
               styles={{ input: { color: valid ? "rgb(34 197 94)" : "white" } }}
               rightSection={
                 <CloseButton
                   aria-label="Clear input"
                   onClick={() => {
-                    setCoupon("");
-                    setQuery("");
+                    setPromoInner("")
                   }}
-                  style={{ display: coupon ? undefined : "none" }}
+                  style={{ display: promoOuter ? undefined : "none" }}
                 />
               }
             />
@@ -160,30 +162,26 @@ export default function Cart() {
               <div className="flex justify-start">Price</div>
               <div className="flex justify-end">₹ {productTotal}</div>
               <div
-                className={`flex justify-start ${
-                  delivery == 0 && "text-green-500"
-                }`}
+                className={`flex justify-start ${delivery == 0 && "text-green-500"
+                  }`}
               >
                 Delivery
               </div>
               <div
-                className={`flex justify-end ${
-                  delivery == 0 && "text-green-500"
-                }`}
+                className={`flex justify-end ${delivery == 0 && "text-green-500"
+                  }`}
               >
                 ₹ {delivery}
               </div>
               <div
-                className={`flex justify-start ${
-                  discount < 0 ? "text-green-500" : " text-white/30"
-                }`}
+                className={`flex justify-start ${discount < 0 ? "text-green-500" : " text-white/30"
+                  }`}
               >
                 Discount
               </div>
               <div
-                className={`flex justify-end ${
-                  discount < 0 ? " text-green-500" : " text-white/30"
-                }`}
+                className={`flex justify-end ${discount < 0 ? " text-green-500" : " text-white/30"
+                  }`}
               >
                 ₹ {discount}
               </div>
@@ -227,14 +225,13 @@ export default function Cart() {
                 </div>
               </div>
               <div className="flex flex-col gap-5 border-t pt-5">
-                {Object.keys(cartItems).map((key) => {
-                  const item = cartItems[key];
+                {cartItems.map((item: Item) => {
                   return (
                     <CartItem
-                      key={key}
-                      id={item.id}
+                      key={item._id}
+                      id={item._id}
                       title={item.name}
-                      img={item.images[0]}
+                      img={urlFor(item.images[0])}
                       price={item.price}
                       quantity={item.quantity || 1}
                     />

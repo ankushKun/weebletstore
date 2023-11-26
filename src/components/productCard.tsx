@@ -20,7 +20,7 @@ export default function ProductCard({
   price: number;
   id: string;
 }) {
-  function addToCart(e) {
+  function addToCart(e: any) {
     e.stopPropagation();
     const cart = JSON.parse(localStorage.getItem("cart") || "{}");
     cart[id] = cart[id] ? cart[id] + 1 : 1;

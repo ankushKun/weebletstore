@@ -1,42 +1,43 @@
-import { ItemResponse, item } from "@/types"
+import { Item } from "@/types"
 import { useEffect, useState } from "react"
 import ProductCard from "@/components/productCard"
+import { urlFor } from "@/utils/sanity/client"
 
 export default function Latest({ itype, limit, randomize = false }: { itype: string, limit: number, randomize?: boolean }) {
-    const [items, setItems] = useState<ItemResponse>({})
+    const [items, setItems] = useState<Item[]>([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        var l = randomize ? limit * 2 : limit
+        var l = randomize ? limit * 5 : limit
         setLoading(true)
         setTimeout(() => {
             setLoading(false)
         }, 30 * 1000)
         fetch(`/api/latest?itype=${itype}&limit=${l}`)
             .then(res => res.json())
-            .then(res => {
-                const randomItems = Object.keys(res).sort(() => Math.random() - 0.5).slice(0, limit)
-                const randomItemsObject: ItemResponse = {}
-                randomItems.forEach((key) => {
-                    randomItemsObject[key] = res[key]
-                })
-                setItems(randomItemsObject)
+            .then((res: Item[]) => {
+                let itms = res.sort()
+                if (randomize)
+                    itms = itms.sort(() => Math.random() - 0.5)
+                itms = itms.slice(0, limit)
+
                 setLoading(false)
+                setItems(itms)
+
             })
     }, [itype, limit, randomize])
 
 
     return <>
         {
-            Object.keys(items).map((key) => {
-                const item: item = items[key]
+            items.map((item: Item) => {
                 return <ProductCard
-                    key={key}
-                    src={item.images[0]}
+                    key={item._id}
+                    src={urlFor(item.images[0])}
                     alt={item.name}
                     title={item.name}
                     price={item.price}
-                    id={item.id}
+                    id={item._id}
                 />
             })
         }

@@ -9,6 +9,7 @@ const nextConfig = {
       "media.tenor.com",
       "lh3.googleusercontent.com",
       "googleusercontent.com",
+      "cdn.sanity.io"
     ],
   },
 };

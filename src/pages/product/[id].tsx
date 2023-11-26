@@ -3,16 +3,17 @@ import Layout from "@/components/layout";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Item } from "@/types";
+import { urlFor } from "@/utils/sanity/client";
 
-export async function getServerSideProps({ query }) {
-  const base =
-    process.env.ENV === "DEV" ? process.env.DEV_URL : process.env.PROD_URL;
-  const item = await fetch(base + `/api/item-details?id=${query.id}`).then(
-    (res) => res.json(),
-  );
+// export async function getServerSideProps({ query }: { query: any }) {
+//   const base =
+//     process.env.ENV === "DEV" ? process.env.DEV_URL : process.env.PROD_URL;
+//   const item = await fetch(base + `/api/item-details?id=${query.id}`).then(
+//     (res) => res.json(),
+//   );
 
-  return { props: { item } };
-}
+//   return { props: { item } };
+// }
 
 export default function Product({ item }: { item: Item }) {
   const [imagePos, setImagePos] = useState(0);
@@ -22,7 +23,7 @@ export default function Product({ item }: { item: Item }) {
       <div className="flex">
         <div className="flex">
           <Image
-            src={item.images[imagePos]}
+            src={urlFor(item.images[imagePos])}
             alt={item.name}
             width={500}
             height={500}
@@ -31,7 +32,7 @@ export default function Product({ item }: { item: Item }) {
             {item.images.map((image, index) => (
               <Image
                 key={index}
-                src={image}
+                src={urlFor(image)}
                 alt={item.name}
                 width={100}
                 height={100}

@@ -30,29 +30,6 @@ export default function Home() {
   const [activeRef, setActiveRef] = useState<any>();
   const [direction, setDirection] = useState(0)
 
-  useEffect(() => {
-    if (!activeRef) return
-    if (direction === 0) return
-    // scroll in a loop
-    const scrollInterval = setInterval(() => {
-      activeRef.current.scrollLeft += direction * 100
-    }, 10)
-    return () => clearInterval(scrollInterval)
-  }, [direction, activeRef])
-
-  function scrollOnMouseMove(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    const mpos = parseInt((e.clientX / window.innerWidth * 100).toFixed(0))
-    if (!activeRef) return
-    if (mpos < 20) {
-      setDirection(-1)
-    }
-    else if (mpos > 80) {
-      setDirection(1)
-    } else {
-      setDirection(0)
-    }
-  }
-
   return (
     <Layout>
       <Carousel autoPlay dynamicHeight emulateTouch infiniteLoop renderIndicator={undefined} showArrows={false} showStatus={false} showThumbs={false} showIndicators={false} swipeable>
@@ -109,7 +86,7 @@ export default function Home() {
         <div>
           <div className="mb-5 pl-20 text-3xl">Browse Bookmarks</div>
           <div className="flex overflow-scroll p-0.5 gap-4 px-2"
-            ref={bookmark} onMouseEnter={() => setActiveRef(bookmark)} onMouseMove={(e) => scrollOnMouseMove(e)} onMouseLeave={() => setActiveRef(null)}>
+            ref={bookmark}>
             <Latest itype="bookmark" limit={4} randomize />
           </div>
         </div>

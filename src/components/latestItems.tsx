@@ -33,11 +33,9 @@ export default function Latest({ itype, limit, randomize = false }: { itype: str
             items.map((item: Item) => {
                 return <ProductCard
                     key={item._id}
-                    src={urlFor(item.images[0])}
+                    item={item}
                     alt={item.name}
-                    title={item.name}
-                    price={item.price}
-                    id={item._id}
+
                 />
             })
         }

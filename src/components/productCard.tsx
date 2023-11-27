@@ -6,24 +6,20 @@ import toast from "react-hot-toast";
 import kroniBuffer from "@/assets/kroni-buffer.gif";
 import { useState } from "react";
 import Link from "next/link";
+import { Item } from "@/types";
+import { urlFor } from "@/utils/sanity/client";
 
 export default function ProductCard({
-  src,
-  alt,
-  title,
-  price,
-  id,
+  item,
+  alt
 }: {
-  src: StaticImageData | string;
-  alt: string;
-  title: string;
-  price: number;
-  id: string;
+  item: Item
+  alt: string
 }) {
   function addToCart(e: any) {
     e.stopPropagation();
     const cart = JSON.parse(localStorage.getItem("cart") || "{}");
-    cart[id] = cart[id] ? cart[id] + 1 : 1;
+    cart[item._id] = cart[item._id] ? cart[item._id] + 1 : 1;
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("storage"));
     toast.success("Added to cart");
@@ -31,16 +27,13 @@ export default function ProductCard({
 
   return (
     <div className="mx-auto flex w-fit min-w-max  flex-col items-center justify-center rounded-lg p-3 ring-white/40 transition-all duration-150 hover:ring-1">
-      <Link href={`/product/${id}`}>
+      <Link href={`/product/${item.slug.current}`}>
         <Image
-          src={src}
+          src={urlFor(item.images[0])}
           alt={alt}
           width={269}
           height={269}
           className={`rounded-lg transition-transform duration-150 hover:scale-105`}
-          loader={() => {
-            return src + "?width=269&height=269";
-          }}
         />
       </Link>
 
@@ -50,14 +43,14 @@ export default function ProductCard({
           <AddCart size={30} />
         </Button>
         <div className="mr-auto w-[87%] text-left text-2xl text-white ">
-          {title}
+          {item.name}
         </div>
         <div className="flex w-full justify-between">
           <div className="text-xl text-green-500">
             <span className="mr-2 font-bold text-red-500/50 line-through">
-              ₹{((price * 5) / 4).toFixed(0)}
+              ₹{((item.price * 5) / 4).toFixed(0)}
             </span>
-            ₹{price}
+            ₹{item.price}
           </div>
         </div>
       </div>

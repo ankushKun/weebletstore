@@ -102,9 +102,9 @@ export default function Navbar() {
               dropdownComponent={() => {
                 return <div className="overflow-scroll flex flex-col p-0.5 gap-1 w-full rounded">
                   {searchResults.map((item) => {
-                    return <Link href={`/product/${item.slug}`}>
+                    return <Link href={`/product/${item.slug.current}`}>
                       <div className="flex gap-2 rounded items-center hover:bg-slate-900 w-full p-1">
-                        <Image src={urlFor(item.images[0])} width={50} height={50} alt={item.slug} className="rounded" />
+                        <Image src={urlFor(item.images[0])} width={50} height={50} alt={item.slug.current} className="rounded" />
                         <div>
                           <div>{item.name}</div>
                           <div className="text-white/70 text-sm">{item.anime}</div>
@@ -211,9 +211,9 @@ export default function Navbar() {
                     dropdownComponent={() => {
                       return <div className="overflow-scroll flex flex-col p-0.5 gap-1 w-full rounded">
                         {searchResults.map((item) => {
-                          return <Link href={`/product/${item.slug}`}>
+                          return <Link href={`/product/${item.slug.current}`}>
                             <div className="flex gap-2 rounded items-center hover:bg-slate-900 w-full p-1">
-                              <Image src={urlFor(item.images[0])} width={50} height={50} alt={item.slug} className="rounded" />
+                              <Image src={urlFor(item.images[0])} width={50} height={50} alt={item.slug.current} className="rounded" />
                               <div>
                                 <div>{item.name}</div>
                                 <div className="text-white/70 text-sm">{item.anime}</div>

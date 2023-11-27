@@ -211,9 +211,9 @@ export default function Cart() {
       <div className="mx-10 grid grid-cols-3 gap-5">
         {Object.keys(cartItems).length > 0 ? (
           <>
-            <div className="col-span-3 mt-5 grid grid-cols-3 md:hidden">
+            {/* <div className="col-span-3 mt-5 grid grid-cols-3 md:hidden">
               <Slip />
-            </div>
+            </div> */}
             <div className="col-span-3 py-5 text-center text-2xl capitalize text-white">
               Cart Items
             </div>
@@ -243,7 +243,7 @@ export default function Cart() {
             <Slip />
           </>
         ) : (
-          <>no items</>
+          <div className="text-center py-5 w-full">no items in cart</div>
         )}
       </div>
     </Layout>

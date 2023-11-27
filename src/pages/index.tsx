@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Layout from "@/components/layout";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import powerBanner from "@/assets/banners/power.png";
 import newArrivals from "@/assets/banners/new-arrivals.png";
 import Collections from "@/components/collections";
 import Latest from "@/components/latestItems";
+import { useHorizontalScroll } from "@/hooks/sideScroll";
 
 function CarouselSlide({ src, alt }: { src: StaticImageData; alt: string }) {
   return (
@@ -22,6 +23,36 @@ function CarouselSlide({ src, alt }: { src: StaticImageData; alt: string }) {
 }
 
 export default function Home() {
+  const sticker = useHorizontalScroll();
+  const coaster = useHorizontalScroll();
+  const poster = useHorizontalScroll();
+  const bookmark = useHorizontalScroll();
+  const [activeRef, setActiveRef] = useState<any>();
+  const [direction, setDirection] = useState(0)
+
+  useEffect(() => {
+    if (!activeRef) return
+    if (direction === 0) return
+    // scroll in a loop
+    const scrollInterval = setInterval(() => {
+      activeRef.current.scrollLeft += direction * 100
+    }, 10)
+    return () => clearInterval(scrollInterval)
+  }, [direction, activeRef])
+
+  function scrollOnMouseMove(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    const mpos = parseInt((e.clientX / window.innerWidth * 100).toFixed(0))
+    if (!activeRef) return
+    if (mpos < 20) {
+      setDirection(-1)
+    }
+    else if (mpos > 80) {
+      setDirection(1)
+    } else {
+      setDirection(0)
+    }
+  }
+
   return (
     <Layout>
       <Carousel autoPlay dynamicHeight emulateTouch infiniteLoop renderIndicator={undefined} showArrows={false} showStatus={false} showThumbs={false} showIndicators={false} swipeable>
@@ -56,25 +87,29 @@ export default function Home() {
       <div className="flex flex-col gap-16">
         <div>
           <div className="mb-5 pl-20 text-3xl">Browse Stickers</div>
-          <div className="flex overflow-scroll p-0.5 gap-4 px-2">
+          <div className="flex overflow-scroll p-0.5 gap-4 px-2"
+            ref={sticker}>
             <Latest itype="sticker" limit={4} randomize />
           </div>
         </div>
         <div>
           <div className="mb-5 pl-20 text-3xl">Browse Coasters</div>
-          <div className="flex overflow-scroll p-0.5 gap-4 px-2">
+          <div className="flex overflow-scroll p-0.5 gap-4 px-2"
+            ref={coaster}>
             <Latest itype="coaster" limit={4} randomize />
           </div>
         </div>
         <div>
           <div className="mb-5 pl-20 text-3xl">Browse Posters</div>
-          <div className="flex overflow-scroll p-0.5 gap-4 px-2">
+          <div className="flex overflow-scroll p-0.5 gap-4 px-2"
+            ref={poster} >
             <Latest itype="poster" limit={4} randomize />
           </div>
         </div>
         <div>
           <div className="mb-5 pl-20 text-3xl">Browse Bookmarks</div>
-          <div className="flex overflow-scroll p-0.5 gap-4 px-2">
+          <div className="flex overflow-scroll p-0.5 gap-4 px-2"
+            ref={bookmark} onMouseEnter={() => setActiveRef(bookmark)} onMouseMove={(e) => scrollOnMouseMove(e)} onMouseLeave={() => setActiveRef(null)}>
             <Latest itype="bookmark" limit={4} randomize />
           </div>
         </div>

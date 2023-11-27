@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
 import { SessionProvider } from "next-auth/react";
-import { type ComponentType } from "react";
+import NextNProgress from 'nextjs-progressbar';
 import "../styles/globals.css";
 
 export default function App({
@@ -34,6 +34,7 @@ export default function App({
           },
         }}
       >
+        <NextNProgress color="#cd7b80" />
         <Component {...pageProps} />
       </MantineProvider>
     </SessionProvider>

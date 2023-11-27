@@ -14,9 +14,9 @@ export default async function handler(
   res: NextApiResponse<Item>,
 ) {
   const data = req.query;
-  const id = data.id;
+  const slug = data.slug;
 
-  const query = `*[_type == "items" && id == "${id}"]`;
+  const query = `*[_type == "items" && slug.current == "${slug}"]`;
   const itemDetails: Item[] = await client.fetch(query);
   const itype = itemDetails[0].itype;
   const descQuery = `*[_type == "descriptions" && itype == "${itype}"]`;

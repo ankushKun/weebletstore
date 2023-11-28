@@ -15,6 +15,7 @@ export default function Cart() {
   const [orderTotal, setOrderTotal] = useState(0);
   const [promoOuter, setPromoOuter] = useState("");
   const [valid, setValid] = useState(false);
+  const [emptyCart, setEmptyCart] = useState(false);
 
   const CartItem = ({
     title,
@@ -37,6 +38,7 @@ export default function Cart() {
       localStorage.setItem("cart", JSON.stringify(cartObject));
       dispatchEvent(new Event("storage"));
       toast.success("Item removed from cart");
+      setEmptyCart(Object.keys(cartObject).length == 0);
     }
 
     function decrement() {
@@ -48,6 +50,7 @@ export default function Cart() {
       localStorage.setItem("cart", JSON.stringify(cartObject));
       dispatchEvent(new Event("storage"));
       toast.success("Item quantity decreased");
+      setEmptyCart(Object.keys(cartObject).length == 0);
     }
 
     function increment() {
@@ -58,6 +61,7 @@ export default function Cart() {
       localStorage.setItem("cart", JSON.stringify(cartObject));
       dispatchEvent(new Event("storage"));
       toast.success("Item quantity increased");
+      setEmptyCart(Object.keys(cartObject).length == 0);
     }
 
     // return <div className="flex gap-5 pb-5 px-5 border-b border-white/20">
@@ -99,6 +103,7 @@ export default function Cart() {
       const cart = window.localStorage.getItem("cart");
       if (!cart) return;
       const cartObject = JSON.parse(cart);
+      setEmptyCart(Object.keys(cartObject).length == 0);
 
       fetch("/api/cart", {
         method: "POST",
@@ -124,12 +129,12 @@ export default function Cart() {
   }, [promoOuter]);
 
   const Slip = () => {
-    const [promoInner, setPromoInner] = useState(promoOuter)
+    const [promoInner, setPromoInner] = useState(promoOuter);
 
     useEffect(() => {
       const timeOutId = setTimeout(() => setPromoOuter(promoInner), 400);
       return () => clearTimeout(timeOutId);
-    }, [promoInner])
+    }, [promoInner]);
 
     return (
       <div className="col-span-3 md:col-span-1 lg:mx-10">
@@ -143,7 +148,9 @@ export default function Cart() {
               placeholder="Promo Code"
               variant="unstyled"
               error={!valid && promoOuter}
-              className={`border-b bg-transparent p-1 outline-none ${valid ? "text-green-500" : "text-red-500"}`}
+              className={`border-b bg-transparent p-1 outline-none ${
+                valid ? "text-green-500" : "text-red-500"
+              }`}
               autoFocus
               value={promoInner}
               onChange={(e) => setPromoInner(e.target.value)}
@@ -152,7 +159,7 @@ export default function Cart() {
                 <CloseButton
                   aria-label="Clear input"
                   onClick={() => {
-                    setPromoInner("")
+                    setPromoInner("");
                   }}
                   style={{ display: promoOuter ? undefined : "none" }}
                 />
@@ -162,26 +169,30 @@ export default function Cart() {
               <div className="flex justify-start">Price</div>
               <div className="flex justify-end">₹ {productTotal}</div>
               <div
-                className={`flex justify-start ${delivery == 0 && "text-green-500"
-                  }`}
+                className={`flex justify-start ${
+                  delivery == 0 && "text-green-500"
+                }`}
               >
                 Delivery
               </div>
               <div
-                className={`flex justify-end ${delivery == 0 && "text-green-500"
-                  }`}
+                className={`flex justify-end ${
+                  delivery == 0 && "text-green-500"
+                }`}
               >
                 ₹ {delivery}
               </div>
               <div
-                className={`flex justify-start ${discount < 0 ? "text-green-500" : " text-white/30"
-                  }`}
+                className={`flex justify-start ${
+                  discount < 0 ? "text-green-500" : " text-white/30"
+                }`}
               >
                 Discount
               </div>
               <div
-                className={`flex justify-end ${discount < 0 ? " text-green-500" : " text-white/30"
-                  }`}
+                className={`flex justify-end ${
+                  discount < 0 ? " text-green-500" : " text-white/30"
+                }`}
               >
                 ₹ {discount}
               </div>
@@ -209,7 +220,7 @@ export default function Cart() {
   return (
     <Layout title="Cart | Weeblet Store">
       <div className="mx-10 grid grid-cols-3 gap-5">
-        {Object.keys(cartItems).length > 0 ? (
+        {!emptyCart ? (
           <>
             {/* <div className="col-span-3 mt-5 grid grid-cols-3 md:hidden">
               <Slip />
@@ -243,7 +254,7 @@ export default function Cart() {
             <Slip />
           </>
         ) : (
-          <div className="text-center py-5 w-full">no items in cart</div>
+          <div className="w-full py-5 text-center">no items in cart</div>
         )}
       </div>
     </Layout>

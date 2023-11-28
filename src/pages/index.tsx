@@ -66,28 +66,28 @@ export default function Home() {
           <div className="mb-5 pl-20 text-3xl">Browse Stickers</div>
           <div className="flex overflow-scroll p-0.5 gap-4 px-2"
             ref={sticker}>
-            <Latest itype="sticker" limit={4} randomize />
+            <Latest itype="sticker" limit={7} randomize />
           </div>
         </div>
         <div>
           <div className="mb-5 pl-20 text-3xl">Browse Coasters</div>
           <div className="flex overflow-scroll p-0.5 gap-4 px-2"
             ref={coaster}>
-            <Latest itype="coaster" limit={4} randomize />
+            <Latest itype="coaster" limit={7} randomize />
           </div>
         </div>
         <div>
           <div className="mb-5 pl-20 text-3xl">Browse Posters</div>
           <div className="flex overflow-scroll p-0.5 gap-4 px-2"
             ref={poster} >
-            <Latest itype="poster" limit={4} randomize />
+            <Latest itype="poster" limit={7} randomize />
           </div>
         </div>
         <div>
           <div className="mb-5 pl-20 text-3xl">Browse Bookmarks</div>
           <div className="flex overflow-scroll p-0.5 gap-4 px-2"
             ref={bookmark}>
-            <Latest itype="bookmark" limit={4} randomize />
+            <Latest itype="bookmark" limit={7} randomize />
           </div>
         </div>
         <Link href="/shop" className="w-full">

@@ -22,23 +22,23 @@ export default function Navbar() {
   const [menuVisible, setMenuVisible] = useInputState(false);
   const [menuVisibleProxy, setMenuVisibleProxy] = useInputState(false);
   const [cartCount, setCartCount] = useInputState(0);
-  const [searchQuery, setSearchQuery] = useInputState("")
-  const [searchQueryProxy, setSearchQueryProxy] = useInputState("")
-  const [searchResults, setSearchResults] = useState<Item[]>([])
+  const [searchQuery, setSearchQuery] = useInputState("");
+  const [searchQueryProxy, setSearchQueryProxy] = useInputState("");
+  const [searchResults, setSearchResults] = useState<Item[]>([]);
 
   const session = useSession();
 
   useEffect(() => {
-    if (!searchQuery) return
+    if (!searchQuery) return;
     fetch(`/api/search?query=${searchQuery}`)
-      .then(res => res.json())
-      .then(res => setSearchResults(res))
-  }, [searchQuery])
+      .then((res) => res.json())
+      .then((res) => setSearchResults(res));
+  }, [searchQuery]);
 
   useEffect(() => {
     const t = setTimeout(() => setSearchQuery(searchQueryProxy), 250);
     return () => clearTimeout(t);
-  }, [searchQueryProxy])
+  }, [searchQueryProxy]);
 
   useEffect(() => {
     if (!window) return;
@@ -90,7 +90,7 @@ export default function Navbar() {
           <div>
             <Select
               data={searchResults.map((item) => {
-                return { value: item._id, label: item.name }
+                return { value: item._id, label: item.name };
               })}
               searchable
               placeholder="Search by name"
@@ -100,22 +100,35 @@ export default function Navbar() {
               onSearchChange={setSearchQueryProxy}
               limit={10}
               dropdownComponent={() => {
-                return <div className="overflow-scroll flex flex-col p-0.5 gap-1 w-full rounded">
-                  {searchResults.map((item) => {
-                    return <Link href={`/product/${item.slug.current}`}>
-                      <div className="flex gap-2 rounded items-center hover:bg-slate-900 w-full p-1">
-                        <Image src={urlFor(item.images[0])} width={50} height={50} alt={item.slug.current} className="rounded" />
-                        <div>
-                          <div>{item.name}</div>
-                          <div className="text-white/70 text-sm">{item.anime}</div>
-                          <div className="text-white/70 text-sm">{item.itype}</div>
-                        </div>
-                      </div>
-                    </Link>
-                  })}
-                </div>
+                return (
+                  <div className="flex w-full flex-col gap-1 overflow-scroll rounded p-0.5">
+                    {searchResults.map((item) => {
+                      return (
+                        <Link href={`/product/${item.slug.current}`}>
+                          <div className="flex w-full items-center gap-2 rounded p-1 hover:bg-slate-900">
+                            <Image
+                              src={urlFor(item.images[0])}
+                              width={50}
+                              height={50}
+                              alt={item.slug.current}
+                              className="rounded"
+                            />
+                            <div>
+                              <div>{item.name}</div>
+                              <div className="text-sm text-white/70">
+                                {item.anime}
+                              </div>
+                              <div className="text-sm text-white/70">
+                                {item.itype}
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                );
               }}
-
             />
           </div>
           <div className="flex items-center gap-5">
@@ -134,7 +147,7 @@ export default function Navbar() {
                   src={
                     session.status == "unauthenticated"
                       ? profilePlaceholder
-                      : session.data?.user?.image as string
+                      : (session.data?.user?.image as string)
                   }
                   className="cursor-pointer rounded-full"
                   width={50}
@@ -147,9 +160,13 @@ export default function Navbar() {
               {session.status != "unauthenticated" && (
                 <Menu.Dropdown>
                   <>
-                    <Menu.Item>Profile</Menu.Item>
-                    <Menu.Item>Orders</Menu.Item>
-                    <Menu.Item>Settings</Menu.Item>
+                    <Menu.Item>
+                      <Link href="/profile">Profile</Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <Link href="/orders">Orders</Link>
+                    </Menu.Item>
+                    {/* <Menu.Item>Settings</Menu.Item> */}
                     <Menu.Item color="red" onClick={() => signOut()}>
                       Logout
                     </Menu.Item>
@@ -179,8 +196,9 @@ export default function Navbar() {
           {menuVisibleProxy && (
             <>
               <div
-                className={`fixed bottom-0 left-0 top-24 z-30 flex h-full w-screen flex-col items-center justify-center gap-10 bg-black bg-opacity-80 backdrop-blur ${menuVisible ? "slide-in-bottom" : "slide-out-bottom"
-                  }`}
+                className={`fixed bottom-0 left-0 top-24 z-30 flex h-full w-screen flex-col items-center justify-center gap-10 bg-black bg-opacity-80 backdrop-blur ${
+                  menuVisible ? "slide-in-bottom" : "slide-out-bottom"
+                }`}
               >
                 <div className="flex h-[80%] w-[90%] flex-col items-end justify-start gap-5">
                   <Image
@@ -188,7 +206,7 @@ export default function Navbar() {
                     src={
                       session.status == "unauthenticated"
                         ? profilePlaceholder
-                        : session.data?.user?.image as string
+                        : (session.data?.user?.image as string)
                     }
                     className="mr-5 cursor-pointer rounded-full"
                     width={50}
@@ -199,7 +217,7 @@ export default function Navbar() {
                   />
                   <Select
                     data={searchResults.map((item) => {
-                      return { value: item._id, label: item.name }
+                      return { value: item._id, label: item.name };
                     })}
                     searchable
                     placeholder="Search by name"
@@ -209,30 +227,44 @@ export default function Navbar() {
                     onSearchChange={setSearchQueryProxy}
                     limit={10}
                     dropdownComponent={() => {
-                      return <div className="overflow-scroll flex flex-col p-0.5 gap-1 w-full rounded">
-                        {searchResults.map((item) => {
-                          return <Link href={`/product/${item.slug.current}`}>
-                            <div className="flex gap-2 rounded items-center hover:bg-slate-900 w-full p-1">
-                              <Image src={urlFor(item.images[0])} width={50} height={50} alt={item.slug.current} className="rounded" />
-                              <div>
-                                <div>{item.name}</div>
-                                <div className="text-white/70 text-sm">{item.anime}</div>
-                                <div className="text-white/70 text-sm">{item.itype}</div>
-                              </div>
-                            </div>
-                          </Link>
-                        })}
-                      </div>
+                      return (
+                        <div className="flex w-full flex-col gap-1 overflow-scroll rounded p-0.5">
+                          {searchResults.map((item) => {
+                            return (
+                              <Link href={`/product/${item.slug.current}`}>
+                                <div className="flex w-full items-center gap-2 rounded p-1 hover:bg-slate-900">
+                                  <Image
+                                    src={urlFor(item.images[0])}
+                                    width={50}
+                                    height={50}
+                                    alt={item.slug.current}
+                                    className="rounded"
+                                  />
+                                  <div>
+                                    <div>{item.name}</div>
+                                    <div className="text-sm text-white/70">
+                                      {item.anime}
+                                    </div>
+                                    <div className="text-sm text-white/70">
+                                      {item.itype}
+                                    </div>
+                                  </div>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      );
                     }}
                   />
+                  <Link href="/profile">
+                    <Button>Profile</Button>
+                  </Link>
+                  <Link href="/orders">
+                    <Button>Orders</Button>
+                  </Link>
                   <Link href="/shop">
                     <Button>Shop</Button>
-                  </Link>
-                  <Link href="/about">
-                    <Button>About</Button>
-                  </Link>
-                  <Link href="/contact">
-                    <Button>Contact Us</Button>
                   </Link>
                   <Link href="/cart">
                     <Button>Cart({cartCount})</Button>

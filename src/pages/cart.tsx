@@ -6,8 +6,10 @@ import toast from "react-hot-toast";
 import { Button, Input, CloseButton } from "@mantine/core";
 import { Item } from "@/types";
 import { urlFor } from "@/utils/sanity/client";
+import { useRouter } from "next/navigation";
 
 export default function Cart() {
+  const router = useRouter();
   const [cartItems, setCartItems] = useState<Item[]>([]);
   const [productTotal, setProductTotal] = useState(0);
   const [delivery, setDelivery] = useState(0);
@@ -93,8 +95,35 @@ export default function Cart() {
     );
   };
 
-  function checkout() {
-    toast.success("Checkout coming soon");
+  async function checkout() {
+    // checks
+    const userData = await fetch("/api/my-profile", { method: "GET" })
+    const userDataJson = await userData.json()
+    if (userData.status != 200) return toast.error("Please update profile before checking out")
+    if (!userDataJson.number) return toast.error("Please add phone number to your profile before checking out")
+    if (!userDataJson.address) return toast.error("Please add address to your profile before checking out")
+    if (!userDataJson.name) return toast.error("Please add name before to your profile checking out")
+    if (!userDataJson.email) return toast.error("Please add email address to your profile before checking out")
+
+    // return toast.success("Please wait while we redirect you to payment gateway")
+
+    const items = cartItems.map((item) => { return { id: item._id, qty: item.quantity } })
+    const res = await fetch("/api/create-order", {
+      method: "POST",
+      body: JSON.stringify({
+        items,
+        promo: promoOuter,
+        total: orderTotal
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+    const resData = await res.json()
+    if (res.status != 200) return toast.error(resData.message)
+
+    window.localStorage.removeItem("cart")
+    router.push(`/pay/${resData.orderId}`)
+
+    console.log(resData)
   }
 
   useEffect(() => {
@@ -148,9 +177,8 @@ export default function Cart() {
               placeholder="Promo Code"
               variant="unstyled"
               error={!valid && promoOuter}
-              className={`border-b bg-transparent p-1 outline-none ${
-                valid ? "text-green-500" : "text-red-500"
-              }`}
+              className={`border-b bg-transparent p-1 outline-none ${valid ? "text-green-500" : "text-red-500"
+                }`}
               autoFocus
               value={promoInner}
               onChange={(e) => setPromoInner(e.target.value)}
@@ -169,30 +197,26 @@ export default function Cart() {
               <div className="flex justify-start">Price</div>
               <div className="flex justify-end">₹ {productTotal}</div>
               <div
-                className={`flex justify-start ${
-                  delivery == 0 && "text-green-500"
-                }`}
+                className={`flex justify-start ${delivery == 0 && "text-green-500"
+                  }`}
               >
                 Delivery
               </div>
               <div
-                className={`flex justify-end ${
-                  delivery == 0 && "text-green-500"
-                }`}
+                className={`flex justify-end ${delivery == 0 && "text-green-500"
+                  }`}
               >
                 ₹ {delivery}
               </div>
               <div
-                className={`flex justify-start ${
-                  discount < 0 ? "text-green-500" : " text-white/30"
-                }`}
+                className={`flex justify-start ${discount < 0 ? "text-green-500" : " text-white/30"
+                  }`}
               >
                 Discount
               </div>
               <div
-                className={`flex justify-end ${
-                  discount < 0 ? " text-green-500" : " text-white/30"
-                }`}
+                className={`flex justify-end ${discount < 0 ? " text-green-500" : " text-white/30"
+                  }`}
               >
                 ₹ {discount}
               </div>

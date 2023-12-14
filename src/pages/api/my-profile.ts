@@ -41,10 +41,10 @@ export default async function handler(
         const val = snapshot.val() || {}
         const userData = {
             ...val,
-            name: name || val.name,
-            email: email || val.email,
-            number: number || val.number,
-            address: address || val.address
+            name: name || val.name || "",
+            email: email || val.email || "",
+            number: number || val.number || "",
+            address: address || val.address || ""
         }
         await set(userRef, userData)
         return res.status(200).json(userData)

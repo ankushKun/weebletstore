@@ -32,7 +32,13 @@ export default function Me() {
 
     async function saveDetails() {
         const emailSafe = session?.user?.email?.replace(".", "_")
-        const userData = { name, number, address, email }
+        const userData = {
+            name: name || "",
+            number: number || "",
+            address: address || "",
+            email: email || ""
+        }
+        console.log(userData)
         const res = await fetch("/api/my-profile", {
             method: "POST",
             body: JSON.stringify(userData),
@@ -71,7 +77,7 @@ export default function Me() {
                         </div>
                         <button className="hover:bg-white/10 active:translate-y-1 p-2 rounded-lg" onClick={saveDetails}>save</button>
                     </div>
-                </div><div className="text-xl ring-1 ring-white w-1/2 text-center">Order History</div>
+                </div>
             </div>
         </Layout>
 }

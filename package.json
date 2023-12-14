@@ -37,6 +37,7 @@
     "next-sanity": "^6.0.5",
     "nextjs-progressbar": "^0.0.16",
     "postcss": "8.4.29",
+    "qrcode": "^1.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
@@ -50,6 +51,7 @@
     "validator": "^13.11.0"
   },
   "devDependencies": {
+    "@types/qrcode": "^1.5.5",
     "@types/validator": "^13.11.7"
   }
 }

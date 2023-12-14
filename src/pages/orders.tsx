@@ -4,6 +4,7 @@ import Layout from "@/components/layout";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { OrderData } from "./api/my-orders";
+import Link from "next/link";
 
 export default function Me() {
     const { data: session, status } = useSession()
@@ -32,7 +33,7 @@ export default function Me() {
                     Object.keys(orders).map((orderId, index) => {
                         return <div className="flex flex-col md:flex-row md:justify-between md:items-center w-full md:w-1/2 p-5 ring-1 ring-white/60 rounded-md shadow-md " key={index}>
                             <div className="flex flex-col justify-center items-start gap-2">
-                                <div className="text-lg font-bold">Order ID: {orderId} | {orders[orderId].status}</div>
+                                <div className="text-lg font-bold">Order ID: {orderId} | {orders[orderId].status} {orders[orderId].status == "unpaid" && <Link href={`/pay/${orderId}`} className="inline text-sm font-light underline underline-offset-2">(pay now)</Link>}</div>
                                 <div className="text-lg font-bold">{orders[orderId].items.length} items</div>
                             </div>
                             <div className="flex flex-col justify-center items-center gap-2 text-green-300">

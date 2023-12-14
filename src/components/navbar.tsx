@@ -161,7 +161,7 @@ export default function Navbar() {
                 <Menu.Dropdown>
                   <>
                     <Menu.Item>
-                      <Link href="/profile">Profile</Link>
+                      <Link href="/me">Profile</Link>
                     </Menu.Item>
                     <Menu.Item>
                       <Link href="/orders">Orders</Link>
@@ -196,9 +196,8 @@ export default function Navbar() {
           {menuVisibleProxy && (
             <>
               <div
-                className={`fixed bottom-0 left-0 top-24 z-30 flex h-full w-screen flex-col items-center justify-center gap-10 bg-black bg-opacity-80 backdrop-blur ${
-                  menuVisible ? "slide-in-bottom" : "slide-out-bottom"
-                }`}
+                className={`fixed bottom-0 left-0 top-24 z-30 flex h-full w-screen flex-col items-center justify-center gap-10 bg-black bg-opacity-80 backdrop-blur ${menuVisible ? "slide-in-bottom" : "slide-out-bottom"
+                  }`}
               >
                 <div className="flex h-[80%] w-[90%] flex-col items-end justify-start gap-5">
                   <Image

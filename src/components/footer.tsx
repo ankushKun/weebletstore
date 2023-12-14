@@ -29,7 +29,7 @@ export default function Footer() {
       <div className="flex flex-col gap-2 text-center">
         <Link href="/tnc">Terms & Conditions</Link>
         <Link href="/privacy">Privacy Policy</Link>
-        <Link href="/privacy">Shipping Policy</Link>
+        <Link href="/shipping">Shipping Policy</Link>
       </div>
     </div>
   );

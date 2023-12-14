@@ -13,16 +13,6 @@ export type UserData = {
     email: string,
     number: string,
     address: string,
-    orders?: {
-        [key: string]: {
-            items: Item[],
-            promoDetails: PromoDetails,
-            description: Description,
-            total: number,
-            date: string,
-            status: string
-        }
-    },
     [key: string]: any
 }
 

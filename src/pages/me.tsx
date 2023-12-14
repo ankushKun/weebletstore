@@ -71,8 +71,7 @@ export default function Me() {
                         </div>
                         <button className="hover:bg-white/10 active:translate-y-1 p-2 rounded-lg" onClick={saveDetails}>save</button>
                     </div>
-                </div>
-                <div className="text-xl ring-1 ring-white w-1/2 text-center">Order History</div>
+                </div><div className="text-xl ring-1 ring-white w-1/2 text-center">Order History</div>
             </div>
         </Layout>
 }

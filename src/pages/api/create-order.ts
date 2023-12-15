@@ -53,7 +53,7 @@ export default async function handler(
         const { name, email } = userInfo
 
         const message = `<center>
-    <img src="weebletstore.in/logo.png" alt="store logo" />
+    <img src="weebletstore.in/logo.png" width="200px" alt="store logo" />
 
     <h1>Order Placed</h1>
 

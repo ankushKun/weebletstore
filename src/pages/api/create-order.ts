@@ -5,6 +5,9 @@ import app from "@/firebase.config";
 import { get, push, getDatabase, ref } from "firebase/database";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "./auth/[...nextauth]"
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_KEY);
 
 const db = getDatabase(app);
 
@@ -46,6 +49,51 @@ export default async function handler(
     }
     try {
         const order = await push(orderRef, orderDetails)
+        const userInfo = (await get(ref(db, `users/${emailSafe}`))).val()
+        const { name, email } = userInfo
+
+        const message = `<center>
+    <img src="weebletstore.in/logo.png" alt="store logo" />
+
+    <h1>Order Placed</h1>
+
+    <p>
+        Hi ${name},<br>
+        Thank you for your recent order at Weeblet Store.
+    </p>
+
+    <p>
+        Your order id is <b>${order.key}</b>.<br><br>
+        Please pay the amount of <b>₹${total}</b> at the given UPI QR code to complete
+        the order.
+    </p>
+
+    <a href="https://weebletstore.in/pay/${order.key}" target="_blank">
+        <button>Visit payment page</button>
+    </a>
+    <br>
+
+    <p>Visit <a href="https://weebletstore.in/orders" target="_blank">weebletstore.in/orders</a> to view your order status</p>
+
+    <p>Thank you for shopping with us ♥️</p>
+
+    <hr>
+
+    <a href="https://weebletstore.in" target="_blank">Weeblet Store</a><br>
+    <a href="https://instagram.com/weeblets_anime_store" target="_blank">@weeblets_anime_store</a><br>
+</center>
+`;
+
+        const subject = `Order Placed | Weeblet Store`;
+        const from = process.env.FROM_EMAIL
+
+        await resend.emails.send({
+            from: `Weeblet Store <${from}>`,
+            to: [email],
+            subject,
+            html: message,
+        })
+
         return res.status(200).json({ orderId: order.key! })
     } catch (e: any) {
         return res.status(500).json({ name: "SERVER ERROR", message: e.message })

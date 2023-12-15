@@ -256,7 +256,7 @@ export default function Navbar() {
                       );
                     }}
                   />
-                  <Link href="/profile">
+                  <Link href="/me">
                     <Button>Profile</Button>
                   </Link>
                   <Link href="/orders">

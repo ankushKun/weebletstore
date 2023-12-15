@@ -44,6 +44,7 @@
     "react-markdown": "^9.0.1",
     "react-responsive-carousel": "^3.2.23",
     "remark-gfm": "^4.0.0",
+    "resend": "^2.0.0",
     "sharp": "^0.32.6",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",

@@ -12,7 +12,7 @@ const resend = new Resend(process.env.RESEND_KEY);
 const db = getDatabase(app);
 
 type OrderDetails = {
-    items: { id: string, qty: number },
+    items: { _id: string, qty: number },
     promo: string,
     total: number,
     user: string,

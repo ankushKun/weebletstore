@@ -107,7 +107,7 @@ export default function Cart() {
 
     // return toast.success("Please wait while we redirect you to payment gateway")
 
-    const items = cartItems.map((item) => { return { id: item._id, qty: item.quantity } })
+    const items = cartItems.map((item) => { return { _id: item._id, qty: item.quantity } })
     const res = await fetch("/api/create-order", {
       method: "POST",
       body: JSON.stringify({

@@ -10,13 +10,13 @@ const db = getDatabase(app);
 
 export type OrderData = {
     [key: string]: {
-        createdAt: number,
-        items: Item[],
-        promo: string,
-        status: string,
-        total: number,
-        user: string,
-    }
+        createdAt: number;
+        items: { _id: string, qty: number }[];
+        promo: string;
+        status: string;
+        total: number;
+        user: string;
+    };
 }
 
 export default async function handler(

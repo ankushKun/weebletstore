@@ -12,7 +12,7 @@ export default function Footer() {
           className="flex items-center justify-center gap-2"
         >
           <IconBrandInstagram size={30} />
-          @weeblets_anime_store
+          @weebletstore
         </Link>
       </div>
       <div className="flex flex-col gap-4">

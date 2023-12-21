@@ -7,7 +7,7 @@ export default function Footer() {
     <div className="mt-5 flex w-full flex-col justify-around gap-6 bg-black p-10 md:flex-row">
       <div>
         <Link
-          href="https://instagram.com/weeblets_anime_store"
+          href="https://instagram.com/weebletstore"
           target="_blank"
           className="flex items-center justify-center gap-2"
         >

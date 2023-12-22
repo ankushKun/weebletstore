@@ -16,9 +16,11 @@ type OrderDetails = {
     createdAt: number,
 }
 
-type OrderResponse = {
+export type OrderResponse = {
     qrImgB64: string,
     amount: number,
+    upiUrl: string,
+    message?: string,
 }
 
 export default async function handler(
@@ -38,7 +40,7 @@ export default async function handler(
         const MERCHANT_VPA = process.env.PAYTM_VPA
         const upiUrl = `upi://pay?pa=${MERCHANT_VPA}&pn=WeebletStore&am=${total}&cu=INR&tn=OrderID ${orderId}&tid=${orderId}`
         const qrImgB64 = await qrcode.toDataURL(upiUrl)
-        return res.status(200).json({ qrImgB64, amount: total })
+        return res.status(200).json({ qrImgB64, amount: total, upiUrl })
     } catch (e: any) {
         return res.status(500).json({ name: "SERVER ERROR", message: e.message })
     }

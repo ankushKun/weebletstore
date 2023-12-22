@@ -40,8 +40,4 @@ export default async function handler(
         const orders = ordersSnapshot.val()
         return res.status(200).json(orders)
     }
-
-
-
-
 }

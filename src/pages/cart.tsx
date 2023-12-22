@@ -7,6 +7,7 @@ import { Button, Input, CloseButton } from "@mantine/core";
 import { Item } from "@/types";
 import { urlFor } from "@/utils/sanity/client";
 import { useRouter } from "next/navigation";
+import copy from "@/assets/copy.svg"
 
 export default function Cart() {
   const router = useRouter();
@@ -250,7 +251,7 @@ export default function Cart() {
               <Slip />
             </div> */}
             <div className="col-span-3 py-5 text-center text-2xl capitalize text-white">
-              Cart Items
+              Your Cart
             </div>
             <div className="col-span-3 md:col-span-2">
               <div className="grid grid-cols-5">
@@ -273,6 +274,18 @@ export default function Cart() {
                   );
                 })}
               </div>
+              <button className="flex gap-1 items-center justify-center mx-auto m-3" onClick={() => {
+                const cart = window.localStorage.getItem("cart");
+                if (!cart) return;
+                const cartObject = JSON.parse(cart);
+                const cartItems = Object.keys(cartObject).map((key) => {
+                  return key.toString() + "x" + cartObject[key].toString()
+                }).join(",")
+                navigator.clipboard.writeText(cartItems)
+                toast.success("Cart copied to clipboard")
+              }}>copy cart
+                <Image src={copy} alt="copy cart" width={17} height={17} />
+              </button>
             </div>
             {/* SLIP */}
             <Slip />

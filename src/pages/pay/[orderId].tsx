@@ -53,9 +53,9 @@ export default function Checkout() {
                         <Image src={upi} alt="UPI logo" height={18} className="" />₹{amount}</div>
                     <div className="text-xl font-medium">WeebletStore (Ankush Singh)</div>
                     <Image src={qr} alt="UPI QR code" width={300} height={300} className="rounded-lg bg-black" />
-                    <div>scan or</div>
+                    <div className="text-sm">scan or</div>
                     <Button className="bg-green-200 hover:bg-green-300 active:bg-green-400" color="dark" variant="outline" onClick={() => router.push(url, "_blank")}>Pay with UPI App</Button>
-                    <div>if you are on mobile</div>
+                    <div className="text-sm">if you are on mobile</div>
                 </div>
                 <div className="text-center p-1">
                     You can copy and share this url to pay<br /> <div className="inline text-green-200 cursor-pointer underline underline-offset-2" onClick={copyUrl}>weebletstore.in/pay/{orderId}</div>

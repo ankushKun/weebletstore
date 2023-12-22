@@ -19,6 +19,12 @@ export default function Cart() {
   const [promoOuter, setPromoOuter] = useState("");
   const [valid, setValid] = useState(false);
   const [emptyCart, setEmptyCart] = useState(false);
+  const [promoInner, setPromoInner] = useState(promoOuter);
+
+  useEffect(() => {
+    const timeOutId = setTimeout(() => setPromoOuter(promoInner), 400);
+    return () => clearTimeout(timeOutId);
+  }, [promoInner]);
 
   const CartItem = ({
     title,
@@ -158,90 +164,6 @@ export default function Cart() {
     window.addEventListener("storage", fetchDetails);
   }, [promoOuter]);
 
-  const Slip = () => {
-    const [promoInner, setPromoInner] = useState(promoOuter);
-
-    useEffect(() => {
-      const timeOutId = setTimeout(() => setPromoOuter(promoInner), 400);
-      return () => clearTimeout(timeOutId);
-    }, [promoInner]);
-
-    return (
-      <div className="col-span-3 md:col-span-1 lg:mx-10">
-        <div className="flex h-fit justify-center rounded-2xl py-5 ring-1 ring-white">
-          <div className="flex h-fit w-[80%] flex-col gap-5">
-            <div className="mb-5 text-center text-2xl uppercase">
-              your order
-            </div>
-            {/* <input type="text" placeholder="Promo Code" className={`p-1 bg-transparent outline-none border-b ${(valid) ? "text-green-500" : "text-red-500"}`} autoFocus value={query} onChange={(e) => setQuery(e.target.value)} /> */}
-            <Input
-              placeholder="Promo Code"
-              variant="unstyled"
-              error={!valid && promoOuter}
-              className={`border-b bg-transparent p-1 outline-none ${valid ? "text-green-500" : "text-red-500"
-                }`}
-              autoFocus
-              value={promoInner}
-              onChange={(e) => setPromoInner(e.target.value)}
-              styles={{ input: { color: valid ? "rgb(34 197 94)" : "white" } }}
-              rightSection={
-                <CloseButton
-                  aria-label="Clear input"
-                  onClick={() => {
-                    setPromoInner("");
-                  }}
-                  style={{ display: promoOuter ? undefined : "none" }}
-                />
-              }
-            />
-            <div className="grid grid-cols-2 gap-y-2 border-b pb-4">
-              <div className="flex justify-start">Price</div>
-              <div className="flex justify-end">₹ {productTotal}</div>
-              <div
-                className={`flex justify-start ${delivery == 0 && "text-green-500"
-                  }`}
-              >
-                Delivery
-              </div>
-              <div
-                className={`flex justify-end ${delivery == 0 && "text-green-500"
-                  }`}
-              >
-                ₹ {delivery}
-              </div>
-              <div
-                className={`flex justify-start ${discount < 0 ? "text-green-500" : " text-white/30"
-                  }`}
-              >
-                Discount
-              </div>
-              <div
-                className={`flex justify-end ${discount < 0 ? " text-green-500" : " text-white/30"
-                  }`}
-              >
-                ₹ {discount}
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-y-2 text-xl font-semibold">
-              <div className="flex justify-start">Total</div>
-              <div className="flex justify-end">₹ {orderTotal}</div>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-center p-5">
-          <Button
-            variant="light"
-            color="gray"
-            className="bg-white/80 text-black hover:text-white"
-            onClick={checkout}
-          >
-            Proceed to Checkout
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <Layout title="Cart | Weeblet Store">
       <div className="mx-10 grid grid-cols-3 gap-5">
@@ -288,7 +210,79 @@ export default function Cart() {
               </button>
             </div>
             {/* SLIP */}
-            <Slip />
+            <div className="col-span-3 md:col-span-1 lg:mx-10">
+              <div className="flex h-fit justify-center rounded-2xl py-5 ring-1 ring-white">
+                <div className="flex h-fit w-[80%] flex-col gap-5">
+                  <div className="mb-5 text-center text-2xl uppercase">
+                    your order
+                  </div>
+                  {/* <input type="text" placeholder="Promo Code" className={`p-1 bg-transparent outline-none border-b ${(valid) ? "text-green-500" : "text-red-500"}`} autoFocus value={query} onChange={(e) => setQuery(e.target.value)} /> */}
+                  <Input
+                    placeholder="Promo Code"
+                    variant="unstyled"
+                    error={!valid && promoOuter}
+                    className={`border-b bg-transparent p-1 outline-none ${valid ? "text-green-500" : "text-red-500"
+                      }`}
+                    autoFocus
+                    value={promoInner}
+                    onChange={(e) => setPromoInner(e.target.value)}
+                    styles={{ input: { color: valid ? "rgb(34 197 94)" : "white" } }}
+                    rightSection={
+                      <CloseButton
+                        aria-label="Clear input"
+                        onClick={() => {
+                          setPromoInner("");
+                        }}
+                        style={{ display: promoOuter ? undefined : "none" }}
+                      />
+                    }
+                  />
+                  <div className="grid grid-cols-2 gap-y-2 border-b pb-4">
+                    <div className="flex justify-start">Price</div>
+                    <div className="flex justify-end">₹ {productTotal}</div>
+                    <div
+                      className={`flex justify-start ${delivery == 0 && "text-green-500"
+                        }`}
+                    >
+                      Delivery
+                    </div>
+                    <div
+                      className={`flex justify-end ${delivery == 0 && "text-green-500"
+                        }`}
+                    >
+                      ₹ {delivery}
+                    </div>
+                    <div
+                      className={`flex justify-start ${discount < 0 ? "text-green-500" : " text-white/30"
+                        }`}
+                    >
+                      Discount
+                    </div>
+                    <div
+                      className={`flex justify-end ${discount < 0 ? " text-green-500" : " text-white/30"
+                        }`}
+                    >
+                      ₹ {discount}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-y-2 text-xl font-semibold">
+                    <div className="flex justify-start">Total</div>
+                    <div className="flex justify-end">₹ {orderTotal}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-center p-5">
+                <Button
+                  variant="light"
+                  color="gray"
+                  className="bg-white/80 text-black hover:text-white"
+                  onClick={checkout}
+                >
+                  Proceed to Checkout
+                </Button>
+              </div>
+            </div>
+            {/* /Slip */}
           </>
         ) : (
           <div className="w-full py-5 text-center">no items in cart</div>

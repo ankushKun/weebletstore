@@ -240,10 +240,7 @@ export default function Cart() {
                   <div className="grid grid-cols-2 gap-y-2 border-b pb-4">
                     <div className="flex justify-start">Price</div>
                     <div className="flex justify-end">₹ {productTotal}</div>
-                    <div
-                      className={`flex justify-start ${delivery == 0 && "text-green-500"
-                        }`}
-                    >
+                    <div className={`flex justify-start ${delivery == 0 && "text-green-500"}`}>
                       Delivery
                     </div>
                     <div
